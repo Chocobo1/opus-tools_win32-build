@@ -1,0 +1,101 @@
+# Notes:
+# - Minimal appveyor.yml file is an empty file. All sections are optional.
+# - Indent each level of configuration with 2 spaces. Do not use tabs!
+# - All section names are case-sensitive.
+# - Section names should be unique on each level.
+
+#---------------------------------#
+#  general configuration          #
+#---------------------------------#
+
+# version format
+version: '{branch}-{build}'
+
+# Do not build on tags (GitHub only)
+skip_tags: true
+
+# avoid malicious attempt via pull requests
+branches:
+  only:
+    - master
+
+
+#---------------------------------#
+#  environment configuration      #
+#---------------------------------#
+
+# environment variables
+# build system info: http://www.appveyor.com/docs/installed-software
+os: Visual Studio 2015
+
+environment:
+  REPO_DIR: &REPO_DIR c:\project  # directory created by appveyor
+
+  OGG_SOL_FILE: libogg_static.sln
+  OGG_MSBUILD_CMD: /m /p:Configuration=Release
+
+  OPUS_SOL_FILE: opus.sln
+  OPUS_MSBUILD_CMD: /m /p:Configuration=Release /t:celt;opus;silk_common;silk_float
+
+  OPUS-TOOLS_SOL_FILE: opus-tools.sln
+  OPUS-TOOLS_MSBUILD_CMD: /m /p:Configuration=Release
+
+# clone directory
+clone_folder: *REPO_DIR
+
+
+#---------------------------------#
+#  build configuration            #
+#---------------------------------#
+
+# scripts to run before build
+before_build:
+  # git submodules
+  - 'cd "%REPO_DIR%"'
+  - 'git submodule update --init --remote --depth 1 --recursive'
+
+  # prepare ogg
+  - 'cd "%REPO_DIR%"'
+  - 'move /Y "src\ogg\VS2015" "lib\libogg\win32"'
+  - 'msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD%'
+  #- 'move "lib\libogg\win32\VS2015\Win32" "lib\libogg\win32\VS2010"'
+
+  # prepare opus
+  - 'cd "%REPO_DIR%"'
+  - 'move /Y "src\opus\VS2015" "lib\opus\win32"'
+  - 'msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD%'
+  #- 'move "lib\opus\VS2015\Win32" "lib\libogg\VS2010"'
+
+# to run your custom scripts instead of automatic MSBuild
+build_script:
+  - 'cd "%REPO_DIR%"'
+  - 'xcopy /E /Y "src\opus-tools" "lib\opus-tools"'
+  - 'msbuild "lib\opus-tools\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD%'
+
+# scripts to run before deployment
+after_build:
+  # prepare for artifacts packaging
+  - 'cd "%REPO_DIR%/lib/opus-tools/Release"'
+  - '7z a -mx9 "opus-tools.7z" "opusdec.exe" "opusenc.exe" "opusinfo.exe"'
+  - 'copy "opus-tools.7z" "%REPO_DIR%"'  # the artifact must reside at the source repo root
+  - 'cd "%REPO_DIR%"'
+  - 'powershell -Command "& { (Get-FileHash -Algorithm SHA1 "opus-tools.7z").hash; }" > "opus-tools.7z.sha1"'
+
+
+#---------------------------------#
+#  tests configuration            #
+#---------------------------------#
+
+# to disable automatic tests
+test: off
+
+
+#---------------------------------#
+#  artifacts configuration        #
+#---------------------------------#
+
+artifacts:
+  - path: opus-tools.7z
+    name: exe
+  - path: opus-tools.7z.sha1
+    name: checksum
