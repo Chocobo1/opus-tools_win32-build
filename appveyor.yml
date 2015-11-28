@@ -35,6 +35,7 @@ environment:
   OGG_MSBUILD_CMD: /m /p:Configuration=Release
 
   OPUS_SOL_FILE: opus.sln
+  OPUS_GIT_TAG: v1.1.1
   OPUS_MSBUILD_CMD: /m /p:Configuration=Release /t:celt;opus;silk_common;silk_float
 
   OPUS-TOOLS_SOL_FILE: opus-tools.sln
@@ -52,19 +53,19 @@ clone_folder: *REPO_DIR
 before_build:
   # git submodules
   - 'cd "%REPO_DIR%"'
-  - 'git submodule update --init --remote --depth 1 --recursive'
+  - 'git submodule update --init --remote --recursive'
 
   # prepare ogg
   - 'cd "%REPO_DIR%"'
   - 'move /Y "src\ogg\VS2015" "lib\libogg\win32"'
   - 'msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD%'
-  #- 'move "lib\libogg\win32\VS2015\Win32" "lib\libogg\win32\VS2010"'
 
   # prepare opus
+  - 'cd "%REPO_DIR%\lib\opus"'
+  - 'git checkout tags/%OPUS_GIT_TAG%'
   - 'cd "%REPO_DIR%"'
   - 'move /Y "src\opus\VS2015" "lib\opus\win32"'
   - 'msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD%'
-  #- 'move "lib\opus\VS2015\Win32" "lib\libogg\VS2010"'
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
