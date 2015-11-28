@@ -32,14 +32,17 @@ environment:
   REPO_DIR: &REPO_DIR c:\project  # directory created by appveyor
 
   OGG_SOL_FILE: libogg_static.sln
-  OGG_MSBUILD_CMD: /m /p:Configuration=Release
+  OGG_MSBUILD_CMD_X86: /m /p:Configuration=Release;Platform=Win32
+  OGG_MSBUILD_CMD_X64: /m /p:Configuration=Release;Platform=x64
 
   OPUS_SOL_FILE: opus.sln
   OPUS_GIT_TAG: v1.1.1
-  OPUS_MSBUILD_CMD: /m /p:Configuration=Release /t:celt;opus;silk_common;silk_float
+  OPUS_MSBUILD_CMD_X86: /m /p:Configuration=Release;Platform=Win32 /t:celt;opus;silk_common;silk_float
+  OPUS_MSBUILD_CMD_X64: /m /p:Configuration=Release;Platform=x64   /t:celt;opus;silk_common;silk_float
 
   OPUS-TOOLS_SOL_FILE: opus-tools.sln
-  OPUS-TOOLS_MSBUILD_CMD: /m /p:Configuration=Release
+  OPUS-TOOLS_MSBUILD_CMD_X86: /m /p:Configuration=Release;Platform=Win32
+  OPUS-TOOLS_MSBUILD_CMD_X64: /m /p:Configuration=Release;Platform=x64
 
 # clone directory
 clone_folder: *REPO_DIR
@@ -58,28 +61,32 @@ before_build:
   # prepare ogg
   - 'cd "%REPO_DIR%"'
   - 'move /Y "src\ogg\VS2015" "lib\libogg\win32"'
-  - 'msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD%'
+  - 'msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD_X86%'
+  - 'msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD_X64%'
 
   # prepare opus
   - 'cd "%REPO_DIR%\lib\opus"'
   - 'git checkout tags/%OPUS_GIT_TAG%'
   - 'cd "%REPO_DIR%"'
   - 'move /Y "src\opus\VS2015" "lib\opus\win32"'
-  - 'msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD%'
+  - 'msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X86%'
+  - 'msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X64%'
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
   - 'cd "%REPO_DIR%"'
   - 'xcopy /E /Y "src\opus-tools" "lib\opus-tools"'
-  - 'msbuild "lib\opus-tools\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD%'
+  - 'msbuild "lib\opus-tools\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X86%'
+  - 'msbuild "lib\opus-tools\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X64%'
 
 # scripts to run before deployment
 after_build:
   # prepare for artifacts packaging
-  - 'cd "%REPO_DIR%/lib/opus-tools/Release"'
-  - '7z a -mx9 "opus-tools.7z" "opusdec.exe" "opusenc.exe" "opusinfo.exe"'
-  - 'copy "opus-tools.7z" "%REPO_DIR%"'  # the artifact must reside at the source repo root
   - 'cd "%REPO_DIR%"'
+  - 'mkdir "win32" "x64"'
+  - 'copy "lib\opus-tools\Release\opus*.exe" "win32"'
+  - 'copy "lib\opus-tools\x64\Release\opus*.exe" "x64"'
+  - '7z a -mx9 "opus-tools.7z" "win32" "x64"'  # the artifact must reside at the source repo root
   - 'powershell -Command "& { (Get-FileHash -Algorithm SHA1 "opus-tools.7z").hash; }" > "opus-tools.7z.sha1"'
 
 
