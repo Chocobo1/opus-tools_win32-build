@@ -39,6 +39,7 @@
     <ProjectGuid>{84DAA768-1A38-4312-BB61-4C78BB59E5B8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>test_opus_api</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
