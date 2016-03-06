@@ -56,7 +56,7 @@ clone_folder: *REPO_DIR
 before_build:
   # git submodules
   - 'cd "%REPO_DIR%"'
-  - 'git submodule update --init --remote --depth 1 --recursive'
+  - 'git submodule update --init --remote --recursive'
 
   # prepare ogg
   - 'cd "%REPO_DIR%"'
