@@ -86,7 +86,7 @@ after_build:
   - 'mkdir "win32" "x64"'
   - 'copy "lib\opus-tools\Release\opus*.exe" "win32"'
   - 'copy "lib\opus-tools\x64\Release\opus*.exe" "x64"'
-  - '7z a -mx9 "opus-tools.7z" "win32" "x64"'  # the artifact must reside at the source repo root
+  - '7z a -mx9 "opus-tools.7z" "Readme.md" "win32" "x64"'  # the artifact must reside at the source repo root
   - 'powershell -Command "& { (Get-FileHash -Algorithm SHA1 "opus-tools.7z").hash; }" > "opus-tools.7z.sha1"'
 
 
