@@ -1,7 +1,7 @@
 ﻿# [opus-tools](https://www.opus-codec.org/) Unofficial Builds [![AppVeyor Build](https://ci.appveyor.com/api/projects/status/github/Chocobo1/opus-tools_win32-build?branch=master&svg=true)](https://ci.appveyor.com/project/Chocobo1/opus-tools-win32-build)
 
 ### Notes
-* Windows executable both x86 & x64 versions included
+* Windows executables both x86 & x64 versions included
 * Source code unmodified
 
  |Project|Version|
