@@ -1,9 +1,9 @@
-[submodule "lib/opus-tools"]
+[submodule "opus-tools"]
 	path = lib/opus-tools
-	url = git://git.xiph.org/opus-tools.git
-[submodule "lib/opus"]
+	url = https://git.xiph.org/opus-tools.git
+[submodule "opus"]
 	path = lib/opus
-	url = git://git.xiph.org/opus.git
-[submodule "lib/libogg"]
+	url = https://git.xiph.org/opus.git
+[submodule "libogg"]
 	path = lib/libogg
-	url = git://git.xiph.org/ogg.git
+	url = https://git.xiph.org/ogg.git
