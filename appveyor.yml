@@ -60,7 +60,7 @@ before_build:
 
   # prepare ogg
   - 'cd "%REPO_DIR%"'
-  - 'rd /S /Q "lib\libogg\win32\VS2015"'
+  - 'if exist "lib\libogg\win32\VS2015" (rd /S /Q "lib\libogg\win32\VS2015")'
   - 'move /Y "src\ogg\VS2015" "lib\libogg\win32"'
   - 'msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD_X86%'
   - 'msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD_X64%'
@@ -69,7 +69,7 @@ before_build:
   - 'cd "%REPO_DIR%\lib\opus"'
   - 'git checkout tags/%OPUS_GIT_TAG%'
   - 'cd "%REPO_DIR%"'
-  - 'rd /S /Q "lib\opus\win32\VS2015"'
+  - 'if exist "lib\opus\win32" (rd /S /Q "lib\opus\win32\VS2015")'
   - 'move /Y "src\opus\VS2015" "lib\opus\win32"'
   - 'msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X86%'
   - 'msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X64%'
