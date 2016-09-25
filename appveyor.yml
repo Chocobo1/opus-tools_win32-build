@@ -77,17 +77,18 @@ before_build:
 # to run your custom scripts instead of automatic MSBuild
 build_script:
   - 'cd "%REPO_DIR%"'
-  - 'xcopy /E /Y "src\opus-tools" "lib\opus-tools"'
-  - 'msbuild "lib\opus-tools\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X86%'
-  - 'msbuild "lib\opus-tools\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X64%'
+  - 'if exist "lib\opus-tools\win32\VS2015" (rd /S /Q "lib\opus-tools\win32\VS2015")'
+  - 'move /Y "src\opus-tools\VS2015" "lib\opus-tools\win32\VS2015"'
+  - 'msbuild "lib\opus-tools\win32\VS2015\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X86%'
+  - 'msbuild "lib\opus-tools\win32\VS2015\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X64%'
 
 # scripts to run before deployment
 after_build:
   # prepare for artifacts packaging
   - 'cd "%REPO_DIR%"'
   - 'mkdir "win32" "x64"'
-  - 'copy "lib\opus-tools\Release\opus*.exe" "win32"'
-  - 'copy "lib\opus-tools\x64\Release\opus*.exe" "x64"'
+  - 'copy "lib\opus-tools\win32\VS2015\Win32\Release\opus*.exe" "win32"'
+  - 'copy "lib\opus-tools\win32\VS2015\x64\Release\opus*.exe" "x64"'
   - '7z a -mx9 "opus-tools.7z" "Readme.md" "win32" "x64"'  # the artifact must reside at the source repo root
   - 'powershell -Command "& { $hash = (Get-FileHash -Algorithm SHA1 "opus-tools.7z").hash.ToString().toLower(); Write-Host $hash " *opus-tools.7z"; }" > "opus-tools.7z.sha1"'
 
