@@ -89,8 +89,8 @@ after_build:
   - 'mkdir "win32" "x64"'
   - 'copy "lib\opus-tools\win32\VS2015\Win32\Release\opus*.exe" "win32"'
   - 'copy "lib\opus-tools\win32\VS2015\x64\Release\opus*.exe" "x64"'
-  - '7z a -mx9 "opus-tools.7z" "Readme.md" "win32" "x64"'  # the artifact must reside at the source repo root
-  - 'powershell -Command "& { $hash = (Get-FileHash -Algorithm SHA1 "opus-tools.7z").hash.ToString().toLower(); Write-Host $hash " *opus-tools.7z"; }" > "opus-tools.7z.sha1"'
+  - '7z a -sfx7z.sfx -mx9 "opus-tools.exe" "Readme.md" "win32" "x64"'  # the artifact must reside at the source repo root
+  - 'powershell -Command "& { $hash = (Get-FileHash -Algorithm SHA1 "opus-tools.exe").hash.ToString().toLower(); Write-Host $hash " *opus-tools.exe"; }" > "opus-tools.exe.sha1"'
 
 
 #---------------------------------#
@@ -106,7 +106,7 @@ test: off
 #---------------------------------#
 
 artifacts:
-  - path: opus-tools.7z
+  - path: opus-tools.exe
     name: exe
-  - path: opus-tools.7z.sha1
+  - path: opus-tools.exe.sha1
     name: checksum
