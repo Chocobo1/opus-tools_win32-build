@@ -86,10 +86,11 @@ build_script:
 after_build:
   # prepare for artifacts packaging
   - 'cd "%REPO_DIR%"'
-  - 'mkdir "win32" "x64"'
-  - 'copy "lib\opus-tools\win32\VS2015\Win32\Release\opus*.exe" "win32"'
-  - 'copy "lib\opus-tools\win32\VS2015\x64\Release\opus*.exe" "x64"'
-  - '7z a -sfx7z.sfx -mx9 "opus-tools.exe" "Readme.md" "win32" "x64"'  # the artifact must reside at the source repo root
+  - 'mkdir "opus-tools\win32" "opus-tools\x64"'
+  - 'copy "Readme.md" "opus-tools"'
+  - 'copy "lib\opus-tools\win32\VS2015\Win32\Release\opus*.exe" "opus-tools\win32"'
+  - 'copy "lib\opus-tools\win32\VS2015\x64\Release\opus*.exe" "opus-tools\x64"'
+  - '7z a -sfx7z.sfx -mx9 "opus-tools.exe" "opus-tools"'  # the artifact must reside at the source repo root
   - 'powershell -Command "& { $hash = (Get-FileHash -Algorithm SHA1 "opus-tools.exe").hash.ToString().toLower(); Write-Host $hash " *opus-tools.exe"; }" > "opus-tools.exe.sha1"'
 
 
