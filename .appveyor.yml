@@ -14,10 +14,10 @@ version: '{branch}-{build}'
 # Do not build on tags (GitHub only)
 skip_tags: true
 
-# avoid malicious attempt via pull requests
+# manual mode
 branches:
-  only:
-    - master
+  except:
+    - /.*/
 
 
 #---------------------------------#
