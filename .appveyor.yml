@@ -25,7 +25,7 @@ branches:
 #---------------------------------#
 
 # environment variables
-# build system info: http://www.appveyor.com/docs/installed-software
+# build system info: https://www.appveyor.com/docs/installed-software/
 os: Visual Studio 2015
 
 environment:
