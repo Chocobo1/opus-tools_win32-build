@@ -36,7 +36,7 @@ environment:
   OGG_MSBUILD_CMD_X64: /m /p:Configuration=Release;Platform=x64
 
   OPUS_SOL_FILE: opus.sln
-  OPUS_GIT_TAG: v1.1.4
+  OPUS_GIT_TAG: v1.1.5
   OPUS_MSBUILD_CMD_X86: /m /p:Configuration=Release;Platform=Win32 /t:celt;opus;silk_common;silk_float
   OPUS_MSBUILD_CMD_X64: /m /p:Configuration=Release;Platform=x64   /t:celt;opus;silk_common;silk_float
 
