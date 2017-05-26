@@ -1,7 +1,7 @@
-﻿# [opus-tools](https://www.opus-codec.org/) Unofficial Builds [![AppVeyor Build](https://ci.appveyor.com/api/projects/status/github/Chocobo1/opus-tools_win32-build?branch=master&svg=true)](https://ci.appveyor.com/project/Chocobo1/opus-tools-win32-build)
+# [opus-tools](https://www.opus-codec.org/) Unofficial Builds [![AppVeyor Build](https://ci.appveyor.com/api/projects/status/github/Chocobo1/opus-tools_win32-build?branch=master&svg=true)](https://ci.appveyor.com/project/Chocobo1/opus-tools-win32-build)
 
 
-### Notes
+### <a href="https://www.opus-codec.org/"><img src="https://www.opus-codec.org/assets/img/opus-logo.svg" alt="opus logo" height="96"></a>
 * x86 & x64 executables for Windows
 * Targeting modern CPU: When using x86 builds, the CPU **must** support SSE2 instructions
 * Release build, optimized for *speed*
