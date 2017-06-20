@@ -15,9 +15,9 @@ version: '{branch}-{build}'
 skip_tags: true
 
 # manual mode
-branches:
-  except:
-    - /.*/
+#branches:
+#  except:
+#    - /.*/
 
 
 #---------------------------------#
@@ -26,23 +26,23 @@ branches:
 
 # environment variables
 # build system info: https://www.appveyor.com/docs/installed-software/
-os: Visual Studio 2015
+os: Visual Studio 2017
 
 environment:
   REPO_DIR: &REPO_DIR c:\project  # directory created by appveyor
 
   OGG_SOL_FILE: libogg_static.sln
-  OGG_MSBUILD_CMD_X86: /m /p:Configuration=Release;Platform=Win32
-  OGG_MSBUILD_CMD_X64: /m /p:Configuration=Release;Platform=x64
+  OGG_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
+  OGG_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
   OPUS_SOL_FILE: opus.sln
-  OPUS_GIT_TAG: v1.1.5
-  OPUS_MSBUILD_CMD_X86: /m /p:Configuration=Release;Platform=Win32 /t:celt;opus;silk_common;silk_float
-  OPUS_MSBUILD_CMD_X64: /m /p:Configuration=Release;Platform=x64   /t:celt;opus;silk_common;silk_float
+  OPUS_GIT_TAG: v1.2
+  OPUS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32 /target:opus
+  OPUS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:opus
 
   OPUS-TOOLS_SOL_FILE: opus-tools.sln
-  OPUS-TOOLS_MSBUILD_CMD_X86: /m /p:Configuration=Release;Platform=Win32
-  OPUS-TOOLS_MSBUILD_CMD_X64: /m /p:Configuration=Release;Platform=x64
+  OPUS-TOOLS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
+  OPUS-TOOLS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
 # clone directory
 clone_folder: *REPO_DIR
