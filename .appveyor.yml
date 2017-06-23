@@ -15,9 +15,9 @@ version: '{branch}-{build}'
 skip_tags: true
 
 # manual mode
-#branches:
-#  except:
-#    - /.*/
+branches:
+  except:
+    - /.*/
 
 
 #---------------------------------#
@@ -55,42 +55,45 @@ clone_folder: *REPO_DIR
 # scripts to run before build
 before_build:
   # git submodules
-  - 'cd "%REPO_DIR%"'
-  - 'git submodule update --init --remote --recursive'
+  - cd "%REPO_DIR%"
+  - git submodule update --init --remote --recursive
 
   # prepare ogg
-  - 'cd "%REPO_DIR%"'
-  - 'if exist "lib\libogg\win32\VS2015" (rd /S /Q "lib\libogg\win32\VS2015")'
-  - 'move /Y "src\ogg\VS2015" "lib\libogg\win32"'
-  - 'msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD_X86%'
-  - 'msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD_X64%'
+  - cd "%REPO_DIR%"
+  - if exist "lib\libogg\win32\VS2015" (rd /S /Q "lib\libogg\win32\VS2015")
+  - move /Y "src\ogg\VS2015" "lib\libogg\win32"
+  - msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD_X86%
+  - msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD_X64%
 
   # prepare opus
-  - 'cd "%REPO_DIR%\lib\opus"'
-  - 'git checkout tags/%OPUS_GIT_TAG%'
-  - 'cd "%REPO_DIR%"'
-  - 'if exist "lib\opus\win32" (rd /S /Q "lib\opus\win32\VS2015")'
-  - 'move /Y "src\opus\VS2015" "lib\opus\win32"'
-  - 'msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X86%'
-  - 'msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X64%'
+  - cd "%REPO_DIR%\lib\opus"
+  - git checkout tags/%OPUS_GIT_TAG%
+  - cd "%REPO_DIR%"
+  - if exist "lib\opus\win32" (rd /S /Q "lib\opus\win32\VS2015")
+  - move /Y "src\opus\VS2015" "lib\opus\win32"
+  - msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X86%
+  - msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X64%
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
-  - 'cd "%REPO_DIR%"'
-  - 'if exist "lib\opus-tools\win32\VS2015" (rd /S /Q "lib\opus-tools\win32\VS2015")'
-  - 'move /Y "src\opus-tools\VS2015" "lib\opus-tools\win32\VS2015"'
-  - 'msbuild "lib\opus-tools\win32\VS2015\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X86%'
-  - 'msbuild "lib\opus-tools\win32\VS2015\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X64%'
+  - cd "%REPO_DIR%"
+  - if exist "lib\opus-tools\win32\VS2015" (rd /S /Q "lib\opus-tools\win32\VS2015")
+  - move /Y "src\opus-tools\VS2015" "lib\opus-tools\win32\VS2015"
+  - msbuild "lib\opus-tools\win32\VS2015\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X86%
+
+  - mkdir "lib\opus-tools\win32\VS2015\x64\Release"
+  - copy  "src\opus-tools\opusenc.pgd" "lib\opus-tools\win32\VS2015\x64\Release\"
+  - msbuild "lib\opus-tools\win32\VS2015\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X64%
 
 # scripts to run before deployment
 after_build:
   # prepare for artifacts packaging
-  - 'cd "%REPO_DIR%"'
-  - 'mkdir "opus-tools\win32" "opus-tools\x64"'
-  - 'copy "Readme.md" "opus-tools"'
-  - 'copy "lib\opus-tools\win32\VS2015\Win32\Release\opus*.exe" "opus-tools\win32"'
-  - 'copy "lib\opus-tools\win32\VS2015\x64\Release\opus*.exe" "opus-tools\x64"'
-  - '7z a -sfx7z.sfx -mx9 "opus-tools.exe" "opus-tools"'  # the artifact must reside at the source repo root
+  - cd "%REPO_DIR%"
+  - mkdir "opus-tools\win32" "opus-tools\x64"
+  - copy "Readme.md" "opus-tools"
+  - copy "lib\opus-tools\win32\VS2015\Win32\Release\opus*.exe" "opus-tools\win32"
+  - copy "lib\opus-tools\win32\VS2015\x64\Release\opus*.exe" "opus-tools\x64"
+  - 7z a -sfx7z.sfx -mx9 "opus-tools.exe" "opus-tools"  # the artifact must reside at the source repo root
   - 'powershell -Command "& { $hash = (Get-FileHash -Algorithm SHA1 "opus-tools.exe").hash.ToString().toLower(); Write-Host $hash " *opus-tools.exe"; }" > "opus-tools.exe.sha1"'
 
 
