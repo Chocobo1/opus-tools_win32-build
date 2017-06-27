@@ -9,7 +9,6 @@
 * Portable executables, no external dependencies (dlls)
 * Release build, optimized for *speed* :rocket:. PGO enabled for x64 encoder.
 * Can run in WindowsXP
-* Targeting modern CPU: When using x86 builds, the CPU **must** support SSE2 instructions
 * Source code unmodified
 
   | Project                                                                                              | Version               |
