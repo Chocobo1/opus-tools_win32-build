@@ -36,7 +36,7 @@ environment:
   OGG_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
   OPUS_SOL_FILE: opus.sln
-  OPUS_GIT_TAG: v1.2
+  OPUS_GIT_TAG: v1.2.1
   OPUS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32 /target:opus
   OPUS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:opus
 
