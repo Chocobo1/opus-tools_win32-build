@@ -40,6 +40,12 @@ environment:
   OPUS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32 /target:opus
   OPUS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:opus
 
+  NASM_URL: http://www.nasm.us/pub/nasm/releasebuilds/2.13.01/win64/nasm-2.13.01-win64.zip
+
+  FLAC_SOL_FILE: libFLAC_static.sln
+  FLAC_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=x86
+  FLAC_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
+
   OPUS-TOOLS_SOL_FILE: opus-tools.sln
   OPUS-TOOLS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
   OPUS-TOOLS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
@@ -73,6 +79,20 @@ before_build:
   - move /Y "src\opus\VS2015" "lib\opus\win32"
   - msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X86%
   - msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X64%
+
+  # install NASM
+  - cd \
+  - appveyor DownloadFile "%NASM_URL%" -FileName "c:\nasm.zip"
+  - 7z x "nasm.zip" > nul
+  - move nasm-* NASM
+  - set PATH=%PATH%;c:\NASM;
+  - nasm -v
+
+  # prepare flac
+  - cd "%REPO_DIR%"
+  - move /Y "src\flac\libFLAC\*" "lib\flac\src\libFLAC"
+  - msbuild "lib\flac\src\libFLAC\%FLAC_SOL_FILE%" %FLAC_MSBUILD_CMD_X86%
+  - msbuild "lib\flac\src\libFLAC\%FLAC_SOL_FILE%" %FLAC_MSBUILD_CMD_X64%
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:

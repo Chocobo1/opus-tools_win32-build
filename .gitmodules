@@ -7,3 +7,6 @@
 [submodule "libogg"]
 	path = lib/libogg
 	url = https://git.xiph.org/ogg.git
+[submodule "lib/flac"]
+	path = lib/flac
+	url = https://git.xiph.org/flac.git

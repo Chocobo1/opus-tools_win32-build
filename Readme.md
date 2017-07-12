@@ -16,6 +16,7 @@
   | [opus-tools](https://git.xiph.org/?p=opus-tools.git), [(mirror)](https://github.com/xiph/opus-tools) | git master            |
   | [opus](https://git.xiph.org/?p=opus.git), [(mirror)](https://github.com/xiph/opus)                   | Latest stable release |
   | [ogg](https://git.xiph.org/?p=ogg.git), [(mirror)](https://github.com/xiph/ogg)                      | git master            |
+  | [flac](https://git.xiph.org/?p=flac.git), [(mirror)](https://github.com/xiph/flac)                   | git master            |
 
 
 ### [Download page](https://github.com/Chocobo1/opus-tools_win32-build/releases)
