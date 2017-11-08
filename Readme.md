@@ -11,12 +11,21 @@
 * Can run in WindowsXP
 * Source code unmodified
 
-  | Project                                                                                              | Version               |
-  | ---------------------------------------------------------------------------------------------------- | --------------------- |
-  | [opus-tools](https://git.xiph.org/?p=opus-tools.git), [(mirror)](https://github.com/xiph/opus-tools) | git master            |
-  | [opus](https://git.xiph.org/?p=opus.git), [(mirror)](https://github.com/xiph/opus)                   | Latest stable release |
-  | [ogg](https://git.xiph.org/?p=ogg.git), [(mirror)](https://github.com/xiph/ogg)                      | git master            |
-  | [flac](https://git.xiph.org/?p=flac.git), [(mirror)](https://github.com/xiph/flac)                   | git master            |
+  | Project                                                           | Version               |
+  | ----------------------------------------------------------------- | --------------------- |
+  | [opus-tools][opus-tools-link], [(mirror)][opus-tools-mirror-link] | git master            |
+  | [opus][opus-link], [(mirror)][opus-mirror-link]                   | Latest stable release |
+  | [ogg][ogg-link], [(mirror)][ogg-mirror-link]                      | git master            |
+  | [flac][flac-link], [(mirror)][flac-mirror-link]                   | git master            |
+
+  [opus-tools-link]: https://git.xiph.org/?p=opus-tools.git
+  [opus-tools-mirror-link]: https://github.com/xiph/opus-tools
+  [opus-link]: https://git.xiph.org/?p=opus.git
+  [opus-mirror-link]: https://github.com/xiph/opus
+  [ogg-link]: https://git.xiph.org/?p=ogg.git
+  [ogg-mirror-link]: https://github.com/xiph/ogg
+  [flac-link]: https://git.xiph.org/?p=flac.git
+  [flac-mirror-link]: https://github.com/xiph/flac
 
 
 ### [Download page](https://github.com/Chocobo1/opus-tools_win32-build/releases)
