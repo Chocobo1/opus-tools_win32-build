@@ -36,11 +36,22 @@ environment:
   OGG_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
   OPUS_SOL_FILE: opus.sln
-  OPUS_GIT_TAG: v1.2.1
+  OPUS_GIT_TAG: v1.3
   OPUS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32 /target:opus
   OPUS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:opus
 
-  NASM_URL: http://www.nasm.us/pub/nasm/releasebuilds/2.13.01/win64/nasm-2.13.01-win64.zip
+  LIBOPUSENC_SOL_FILE: opusenc.sln
+  LIBOPUSENC_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
+  LIBOPUSENC_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
+
+  OPENSSL32_BIN_URL: https://github.com/Chocobo1/openssl_win32-build/releases/download/2018.10.19/openssl-1.0.2p-32.exe
+  OPENSSL64_BIN_URL: https://github.com/Chocobo1/openssl_win32-build/releases/download/2018.10.19/openssl-1.0.2p-64.exe
+
+  OPUSFILE_SOL_FILE: opusfile.sln
+  OPUSFILE_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32 /target:opusfile
+  OPUSFILE_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:opusfile
+
+  NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/win64/nasm-2.13.03-win64.zip
 
   FLAC_SOL_FILE: libFLAC_static.sln
   FLAC_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=x86
@@ -80,6 +91,28 @@ before_build:
   - msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X86%
   - msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X64%
 
+  # prepare libopusenc
+  - cd "%REPO_DIR%"
+  - if exist "lib\libopusenc\win32\VS2015" (rd /S /Q "lib\libopusenc\win32\VS2015")
+  - move /Y "src\libopusenc\VS2015" "lib\libopusenc\win32"
+  - msbuild "lib\libopusenc\win32\VS2015\%LIBOPUSENC_SOL_FILE%" %LIBOPUSENC_MSBUILD_CMD_X86%
+  - msbuild "lib\libopusenc\win32\VS2015\%LIBOPUSENC_SOL_FILE%" %LIBOPUSENC_MSBUILD_CMD_X64%
+
+  # prepare openssl
+  - cd "%REPO_DIR%\lib"
+  - mkdir "openssl" && cd "openssl"
+  - appveyor DownloadFile "%OPENSSL32_BIN_URL%" -FileName "openssl32.exe"
+  - 7z x "openssl32.exe" -oWin32 > nul
+  - appveyor DownloadFile "%OPENSSL64_BIN_URL%" -FileName "openssl64.exe"
+  - 7z x "openssl64.exe" -ox64 > nul
+
+  # prepare opusfile
+  - cd "%REPO_DIR%"
+  - if exist "lib\opusfile\win32\VS2015" (rd /S /Q "lib\opusfile\win32\VS2015")
+  - move /Y "src\opusfile\VS2015" "lib\opusfile\win32"
+  - msbuild "lib\opusfile\win32\VS2015\%OPUSFILE_SOL_FILE%" %OPUSFILE_MSBUILD_CMD_X86%
+  - msbuild "lib\opusfile\win32\VS2015\%OPUSFILE_SOL_FILE%" %OPUSFILE_MSBUILD_CMD_X64%
+
   # install NASM
   - cd \
   - appveyor DownloadFile "%NASM_URL%" -FileName "c:\nasm.zip"
@@ -101,8 +134,8 @@ build_script:
   - move /Y "src\opus-tools\VS2015" "lib\opus-tools\win32\VS2015"
   - msbuild "lib\opus-tools\win32\VS2015\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X86%
 
-  - mkdir "lib\opus-tools\win32\VS2015\x64\Release"
-  - copy  "src\opus-tools\opusenc.pgd" "lib\opus-tools\win32\VS2015\x64\Release\"
+  #- mkdir "lib\opus-tools\win32\VS2015\x64\Release"
+  #- copy  "src\opus-tools\opusenc.pgd" "lib\opus-tools\win32\VS2015\x64\Release\"
   - msbuild "lib\opus-tools\win32\VS2015\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X64%
 
 # scripts to run before deployment
@@ -114,7 +147,7 @@ after_build:
   - copy "lib\opus-tools\win32\VS2015\Win32\Release\opus*.exe" "opus-tools\win32"
   - copy "lib\opus-tools\win32\VS2015\x64\Release\opus*.exe" "opus-tools\x64"
   - 7z a -sfx7z.sfx -mx9 "opus-tools.exe" "opus-tools"  # the artifact must reside at the source repo root
-  - 'powershell -Command "& { $hash = (Get-FileHash -Algorithm SHA1 "opus-tools.exe").hash.ToString().toLower(); Write-Host $hash " *opus-tools.exe"; }" > "opus-tools.exe.sha1"'
+  - 'powershell -Command "& { $hash = (Get-FileHash -Algorithm SHA256 "opus-tools.exe").hash.ToString().toLower(); Write-Host $hash " *opus-tools.exe"; }" > "opus-tools.exe.sha256"'
 
 
 #---------------------------------#
@@ -132,5 +165,5 @@ test: off
 artifacts:
   - path: opus-tools.exe
     name: exe
-  - path: opus-tools.exe.sha1
+  - path: opus-tools.exe.sha256
     name: checksum

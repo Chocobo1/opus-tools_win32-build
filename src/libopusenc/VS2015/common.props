@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <CharacterSet Condition="'$(ConfigurationType)'=='Application'">Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='DebugDLL' or '$(Configuration)'=='DebugDLL_fixed'">
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Release' or '$(Configuration)'=='ReleaseDLL' or '$(Configuration)'=='ReleaseDLL_fixed'">
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\;..\..\include;..\..\..\opus\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_LIB;RANDOM_PREFIX=libopusenc;OUTSIDE_SPEEX;HAVE_CONFIG_H;WIN32;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug' or '$(Configuration)'=='DebugDLL' or '$(Configuration)'=='DebugDLL_fixed'">
+    <ClCompile>
+      <RuntimeLibrary Condition="'$(Configuration)'=='Debug'">MultiThreadedDebug</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)'!='Debug'">MultiThreadedDebugDLL</RuntimeLibrary>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release' or '$(Configuration)'=='ReleaseDLL' or '$(Configuration)'=='ReleaseDLL_fixed'">
+    <ClCompile>
+      <FloatingPointModel Condition="'$(Configuration)'=='Release'">Fast</FloatingPointModel>
+      <FloatingPointModel Condition="'$(Configuration)'!='Release'">Precise</FloatingPointModel>
+      <RuntimeLibrary Condition="'$(Configuration)'=='Release'">MultiThreaded</RuntimeLibrary>
+      <RuntimeLibrary Condition="'$(Configuration)'!='Release'">MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

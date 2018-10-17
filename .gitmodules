@@ -10,3 +10,9 @@
 [submodule "lib/flac"]
 	path = lib/flac
 	url = https://git.xiph.org/flac.git
+[submodule "lib/libopusenc"]
+	path = lib/libopusenc
+	url = https://git.xiph.org/libopusenc.git
+[submodule "lib/opusfile"]
+	path = lib/opusfile
+	url = https://git.xiph.org/opusfile.git

@@ -24,23 +24,17 @@
     <ClCompile Include="..\..\src\opus_header.c" />
     <ClCompile Include="..\..\src\wav_io.c" />
     <ClCompile Include="..\..\src\wave_out.c" />
-    <ClCompile Include="..\..\src\audio-in.c" />
     <ClCompile Include="..\..\src\opusdec.c" />
     <ClCompile Include="..\..\src\resample.c" />
     <ClCompile Include="..\..\src\diag_range.c" />
     <ClCompile Include="..\..\win32\unicode_support.c" />
-    <ClCompile Include="..\..\src\flac.c" />
-    <ClCompile Include="..\..\src\lpc.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\share\getopt.h" />
+    <ClInclude Include="..\..\include\getopt.h" />
     <ClInclude Include="..\..\src\arch.h" />
     <ClInclude Include="..\..\src\cpusupport.h" />
     <ClInclude Include="..\..\src\diag_range.h" />
-    <ClInclude Include="..\..\src\flac.h" />
-    <ClInclude Include="..\..\src\lpc.h" />
     <ClInclude Include="..\..\src\opus_header.h" />
-    <ClInclude Include="..\..\src\os_support.h" />
     <ClInclude Include="..\..\src\resample_sse.h" />
     <ClInclude Include="..\..\src\speex_resampler.h" />
     <ClInclude Include="..\..\src\stack_alloc.h" />
