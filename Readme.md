@@ -7,7 +7,7 @@
 ### <a href="https://www.opus-codec.org/"><img src="https://www.opus-codec.org/assets/img/opus-logo.svg" alt="opus logo" height="96"></a>
 * x86 & x64 executables for Windows
 * Portable executables, no external dependencies (dlls)
-* Release build, optimized for *speed* :rocket:.
+* Release build, optimized for *speed* :rocket:
 * Can run in WindowsXP
 * Source code unmodified
 
