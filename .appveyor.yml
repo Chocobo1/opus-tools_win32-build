@@ -35,23 +35,23 @@ environment:
   OGG_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
   OGG_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
-  OPUS_SOL_FILE: opus.sln
-  OPUS_GIT_TAG: v1.3
-  OPUS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32 /target:opus
-  OPUS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:opus
+  OPUS_SOL_FILE: Opus.sln
+  OPUS_GIT_TAG: v1.3.1
+  OPUS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
+  OPUS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
   LIBOPUSENC_SOL_FILE: opusenc.sln
   LIBOPUSENC_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
   LIBOPUSENC_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
-  OPENSSL32_BIN_URL: https://github.com/Chocobo1/openssl_win32-build/releases/download/2018.10.19/openssl-1.0.2p-32.exe
-  OPENSSL64_BIN_URL: https://github.com/Chocobo1/openssl_win32-build/releases/download/2018.10.19/openssl-1.0.2p-64.exe
+  OPENSSL32_BIN_URL: https://github.com/Chocobo1/openssl_win32-build/releases/download/2019.04.13/openssl-1.0.2r-32.exe
+  OPENSSL64_BIN_URL: https://github.com/Chocobo1/openssl_win32-build/releases/download/2019.04.13/openssl-1.0.2r-64.exe
 
   OPUSFILE_SOL_FILE: opusfile.sln
   OPUSFILE_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32 /target:opusfile
   OPUSFILE_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:opusfile
 
-  NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/win64/nasm-2.13.03-win64.zip
+  NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/win64/nasm-2.14.02-win64.zip
 
   FLAC_SOL_FILE: libFLAC_static.sln
   FLAC_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=x86
@@ -85,11 +85,17 @@ before_build:
   # prepare opus
   - cd "%REPO_DIR%\lib\opus"
   - git checkout tags/%OPUS_GIT_TAG%
-  - cd "%REPO_DIR%"
-  - if exist "lib\opus\win32" (rd /S /Q "lib\opus\win32\VS2015")
-  - move /Y "src\opus\VS2015" "lib\opus\win32"
-  - msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X86%
-  - msbuild "lib\opus\win32\VS2015\%OPUS_SOL_FILE%" %OPUS_MSBUILD_CMD_X64%
+  # incompetent cmake that I have to patch this
+  - echo set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MT") >> "opus_config.cmake"
+  - mkdir "_build" && cd "_build"
+  - mkdir "Win32" && cd "Win32"
+  - cmake -G "Visual Studio 15 2017" -DCMAKE_BUILD_TYPE=Release ..\..\
+  - msbuild %OPUS_SOL_FILE% %OPUS_MSBUILD_CMD_X86%
+  - cd ..
+  - mkdir "x64" && cd "x64"
+  - cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Release ..\..\
+  - msbuild %OPUS_SOL_FILE% %OPUS_MSBUILD_CMD_X64%
+  - cd ..
 
   # prepare libopusenc
   - cd "%REPO_DIR%"
