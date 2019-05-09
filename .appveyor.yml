@@ -31,9 +31,13 @@ os: Visual Studio 2017
 environment:
   REPO_DIR: &REPO_DIR c:\project  # directory created by appveyor
 
-  OGG_SOL_FILE: libogg_static.sln
-  OGG_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
-  OGG_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
+  CMAKE_GENERATOR_X86: Visual Studio 15 2017
+  CMAKE_GENERATOR_X64: Visual Studio 15 2017 Win64
+  CMAKE_COMMON_DEFINES: -DCMAKE_TOOLCHAIN_FILE="%REPO_DIR%\src\msvc_flags.cmake" -DCMAKE_BUILD_TYPE=Release
+
+  OGG_SOL_FILE: libogg.sln
+  OGG_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32 /target:ogg
+  OGG_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:ogg
 
   OPUS_SOL_FILE: Opus.sln
   OPUS_GIT_TAG: v1.3.1
@@ -53,9 +57,11 @@ environment:
 
   NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/win64/nasm-2.14.02-win64.zip
 
-  FLAC_SOL_FILE: libFLAC_static.sln
-  FLAC_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=x86
-  FLAC_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
+  FLAC_SOL_FILE: FLAC.sln
+  FLAC_CMAKE_X86: -DOGG_INCLUDE_DIR="%REPO_DIR%\lib\libogg\include" -DOGG_LIBRARY="%REPO_DIR%\lib\libogg\_build\Win32\Release\ogg.lib"
+  FLAC_CMAKE_X64: -DOGG_INCLUDE_DIR="%REPO_DIR%\lib\libogg\include" -DOGG_LIBRARY="%REPO_DIR%\lib\libogg\_build\x64\Release\ogg.lib"
+  FLAC_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32 /target:FLAC++
+  FLAC_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:FLAC++
 
   OPUS-TOOLS_SOL_FILE: opus-tools.sln
   OPUS-TOOLS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
@@ -76,24 +82,27 @@ before_build:
   - git submodule update --init --remote --recursive
 
   # prepare ogg
-  - cd "%REPO_DIR%"
-  - if exist "lib\libogg\win32\VS2015" (rd /S /Q "lib\libogg\win32\VS2015")
-  - move /Y "src\ogg\VS2015" "lib\libogg\win32"
-  - msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD_X86%
-  - msbuild "lib\libogg\win32\VS2015\%OGG_SOL_FILE%" %OGG_MSBUILD_CMD_X64%
+  - cd "%REPO_DIR%\lib\libogg"
+  - mkdir "_build" && cd "_build"
+  - mkdir "Win32" && cd "Win32"
+  - cmake -G "%CMAKE_GENERATOR_X86%" %CMAKE_COMMON_DEFINES% ..\..\
+  - msbuild %OGG_SOL_FILE% %OGG_MSBUILD_CMD_X86%
+  - cd ..
+  - mkdir "x64" && cd "x64"
+  - cmake -G "CMAKE_GENERATOR_X64" %CMAKE_COMMON_DEFINES% ..\..\
+  - msbuild %OGG_SOL_FILE% %OGG_MSBUILD_CMD_X64%
+  - cd ..
 
   # prepare opus
   - cd "%REPO_DIR%\lib\opus"
   - git checkout tags/%OPUS_GIT_TAG%
-  # incompetent cmake that I have to patch this
-  - echo set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MT") >> "opus_config.cmake"
   - mkdir "_build" && cd "_build"
   - mkdir "Win32" && cd "Win32"
-  - cmake -G "Visual Studio 15 2017" -DCMAKE_BUILD_TYPE=Release ..\..\
+  - cmake -G "CMAKE_GENERATOR_X86" %CMAKE_COMMON_DEFINES% ..\..\
   - msbuild %OPUS_SOL_FILE% %OPUS_MSBUILD_CMD_X86%
   - cd ..
   - mkdir "x64" && cd "x64"
-  - cmake -G "Visual Studio 15 2017 Win64" -DCMAKE_BUILD_TYPE=Release ..\..\
+  - cmake -G "CMAKE_GENERATOR_X64" %CMAKE_COMMON_DEFINES% ..\..\
   - msbuild %OPUS_SOL_FILE% %OPUS_MSBUILD_CMD_X64%
   - cd ..
 
@@ -128,16 +137,23 @@ before_build:
   - nasm -v
 
   # prepare flac
-  - cd "%REPO_DIR%"
-  - move /Y "src\flac\libFLAC\*" "lib\flac\src\libFLAC"
-  - msbuild "lib\flac\src\libFLAC\%FLAC_SOL_FILE%" %FLAC_MSBUILD_CMD_X86%
-  - msbuild "lib\flac\src\libFLAC\%FLAC_SOL_FILE%" %FLAC_MSBUILD_CMD_X64%
+  - cd "%REPO_DIR%\lib\flac"
+  - mkdir "_build" && cd "_build"
+  - mkdir "Win32" && cd "Win32"
+  - cmake -G "CMAKE_GENERATOR_X86" %CMAKE_COMMON_DEFINES% %FLAC_CMAKE_X86% ..\..\
+  - msbuild %FLAC_SOL_FILE% %FLAC_MSBUILD_CMD_X86%
+  - cd ..
+  - mkdir "x64" && cd "x64"
+  - cmake -G "CMAKE_GENERATOR_X64" %CMAKE_COMMON_DEFINES% %FLAC_CMAKE_X64% ..\..\
+  - msbuild %FLAC_SOL_FILE% %FLAC_MSBUILD_CMD_X64%
+  - cd ..
 
 # to run your custom scripts instead of automatic MSBuild
 build_script:
   - cd "%REPO_DIR%"
   - if exist "lib\opus-tools\win32\VS2015" (rd /S /Q "lib\opus-tools\win32\VS2015")
   - move /Y "src\opus-tools\VS2015" "lib\opus-tools\win32\VS2015"
+  - 'powershell -Command "& { (Get-Content "lib\opus-tools\win32\config.h") | ForEach-Object { $_ -replace 'libFLAC_static.lib', 'FLAC++.lib' } | Set-Content "lib\opus-tools\win32\config.h" }"'
   - msbuild "lib\opus-tools\win32\VS2015\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X86%
 
   #- mkdir "lib\opus-tools\win32\VS2015\x64\Release"
