@@ -26,13 +26,13 @@ branches:
 
 # environment variables
 # build system info: https://www.appveyor.com/docs/installed-software/
-os: Visual Studio 2017
+os: Visual Studio 2019
 
 environment:
   REPO_DIR: &REPO_DIR c:\project  # directory created by appveyor
 
-  CMAKE_GENERATOR_X86: Visual Studio 15 2017
-  CMAKE_GENERATOR_X64: Visual Studio 15 2017 Win64
+  CMAKE_GENERATOR_X86: -G "Visual Studio 16 2019" -A "Win32"
+  CMAKE_GENERATOR_X64: -G "Visual Studio 16 2019" -A "x64"
   CMAKE_COMMON_DEFINES: -DCMAKE_TOOLCHAIN_FILE="%REPO_DIR%\src\msvc_flags.cmake" -DCMAKE_BUILD_TYPE=Release
 
   OGG_SOL_FILE: libogg.sln
@@ -85,11 +85,11 @@ before_build:
   - cd "%REPO_DIR%\lib\libogg"
   - mkdir "_build" && cd "_build"
   - mkdir "Win32" && cd "Win32"
-  - cmake -G "%CMAKE_GENERATOR_X86%" %CMAKE_COMMON_DEFINES% ..\..\
+  - cmake %CMAKE_GENERATOR_X86% %CMAKE_COMMON_DEFINES% ..\..\
   - msbuild %OGG_SOL_FILE% %OGG_MSBUILD_CMD_X86%
   - cd ..
   - mkdir "x64" && cd "x64"
-  - cmake -G "CMAKE_GENERATOR_X64" %CMAKE_COMMON_DEFINES% ..\..\
+  - cmake %CMAKE_GENERATOR_X64% %CMAKE_COMMON_DEFINES% ..\..\
   - msbuild %OGG_SOL_FILE% %OGG_MSBUILD_CMD_X64%
   - cd ..
 
@@ -98,11 +98,11 @@ before_build:
   - git checkout tags/%OPUS_GIT_TAG%
   - mkdir "_build" && cd "_build"
   - mkdir "Win32" && cd "Win32"
-  - cmake -G "CMAKE_GENERATOR_X86" %CMAKE_COMMON_DEFINES% ..\..\
+  - cmake %CMAKE_GENERATOR_X86% %CMAKE_COMMON_DEFINES% ..\..\
   - msbuild %OPUS_SOL_FILE% %OPUS_MSBUILD_CMD_X86%
   - cd ..
   - mkdir "x64" && cd "x64"
-  - cmake -G "CMAKE_GENERATOR_X64" %CMAKE_COMMON_DEFINES% ..\..\
+  - cmake %CMAKE_GENERATOR_X64% %CMAKE_COMMON_DEFINES% ..\..\
   - msbuild %OPUS_SOL_FILE% %OPUS_MSBUILD_CMD_X64%
   - cd ..
 
@@ -140,11 +140,11 @@ before_build:
   - cd "%REPO_DIR%\lib\flac"
   - mkdir "_build" && cd "_build"
   - mkdir "Win32" && cd "Win32"
-  - cmake -G "CMAKE_GENERATOR_X86" %CMAKE_COMMON_DEFINES% %FLAC_CMAKE_X86% ..\..\
+  - cmake %CMAKE_GENERATOR_X86% %CMAKE_COMMON_DEFINES% %FLAC_CMAKE_X86% ..\..\
   - msbuild %FLAC_SOL_FILE% %FLAC_MSBUILD_CMD_X86%
   - cd ..
   - mkdir "x64" && cd "x64"
-  - cmake -G "CMAKE_GENERATOR_X64" %CMAKE_COMMON_DEFINES% %FLAC_CMAKE_X64% ..\..\
+  - cmake %CMAKE_GENERATOR_X64% %CMAKE_COMMON_DEFINES% %FLAC_CMAKE_X64% ..\..\
   - msbuild %FLAC_SOL_FILE% %FLAC_MSBUILD_CMD_X64%
   - cd ..
 
@@ -153,7 +153,7 @@ build_script:
   - cd "%REPO_DIR%"
   - if exist "lib\opus-tools\win32\VS2015" (rd /S /Q "lib\opus-tools\win32\VS2015")
   - move /Y "src\opus-tools\VS2015" "lib\opus-tools\win32\VS2015"
-  - 'powershell -Command "& { (Get-Content "lib\opus-tools\win32\config.h") | ForEach-Object { $_ -replace 'libFLAC_static.lib', 'FLAC++.lib' } | Set-Content "lib\opus-tools\win32\config.h" }"'
+  - ps: (Get-Content 'lib\opus-tools\win32\config.h') | ForEach-Object { $_ -replace 'libFLAC_static.lib', 'FLAC++.lib' } | Set-Content 'lib\opus-tools\win32\config.h'
   - msbuild "lib\opus-tools\win32\VS2015\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X86%
 
   #- mkdir "lib\opus-tools\win32\VS2015\x64\Release"
