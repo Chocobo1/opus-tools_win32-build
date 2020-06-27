@@ -3,7 +3,7 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
-    <LibraryPath>..\..\..\opus\_build\$(Platform)\$(Configuration);..\..\..\libopusenc\win32\VS2015\$(Platform)\$(Configuration);..\..\..\openssl\$(Platform)\lib;..\..\..\opusfile\win32\VS2015\$(Platform)\Release;..\..\..\libogg\_build\$(Platform)\$(Configuration);..\..\..\flac\_build\$(Platform)\src\libFLAC\$(Configuration);..\..\..\flac\_build\$(Platform)\src\libFLAC++\$(Configuration);$(LibraryPath)</LibraryPath>
+    <LibraryPath>..\..\..\opus\_build\$(Platform)\$(Configuration);..\..\..\libopusenc\win32\VS2015\$(Platform)\$(Configuration);..\..\..\openssl\$(Platform)\lib;..\..\..\opusfile\win32\VS2015\$(Platform)\Release-NoHTTP;..\..\..\libogg\_build\$(Platform)\$(Configuration);..\..\..\flac\_build\$(Platform)\src\libFLAC\$(Configuration);..\..\..\flac\_build\$(Platform)\src\libFLAC++\$(Configuration);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
