@@ -138,6 +138,7 @@ before_build:
 
   # prepare flac
   - cd "%REPO_DIR%\lib\flac"
+  - ps: (Get-Content 'src\libFLAC\ia32\CMakeLists.txt') | ForEach-Object { $_ -replace '^#include_directories', 'include_directories' } | Set-Content 'src\libFLAC\ia32\CMakeLists.txt'
   - mkdir "_build" && cd "_build"
   - mkdir "Win32" && cd "Win32"
   - cmake %CMAKE_GENERATOR_X86% %CMAKE_COMMON_DEFINES% %FLAC_CMAKE_X86% ..\..\
