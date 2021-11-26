@@ -25,17 +25,17 @@ branches:
 #---------------------------------#
 
 # environment variables
-# build system info: https://www.appveyor.com/docs/installed-software/
-os: Visual Studio 2019
+# build system info: https://www.appveyor.com/docs/windows-images-software/
+os: Visual Studio 2022
 
 environment:
   REPO_DIR: &REPO_DIR c:\project  # directory created by appveyor
 
-  CMAKE_GENERATOR_X86: -G "Visual Studio 16 2019" -A "Win32"
-  CMAKE_GENERATOR_X64: -G "Visual Studio 16 2019" -A "x64"
-  CMAKE_COMMON_DEFINES: -DCMAKE_TOOLCHAIN_FILE="%REPO_DIR%\src\msvc_flags.cmake" -DCMAKE_BUILD_TYPE=Release
+  CMAKE_GENERATOR_X86: -G "Visual Studio 17 2022" -A "Win32"
+  CMAKE_GENERATOR_X64: -G "Visual Studio 17 2022" -A "x64"
+  CMAKE_COMMON_DEFINES: -DCMAKE_TOOLCHAIN_FILE="%REPO_DIR%\src\msvc_flags.cmake"
 
-  OGG_SOL_FILE: libogg.sln
+  OGG_SOL_FILE: ogg.sln
   OGG_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32 /target:ogg
   OGG_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:ogg
 
@@ -55,7 +55,7 @@ environment:
   OPUSFILE_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release-NoHTTP,Platform=Win32 /target:opusfile
   OPUSFILE_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release-NoHTTP,Platform=x64   /target:opusfile
 
-  NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/win64/nasm-2.14.02-win64.zip
+  NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/win64/nasm-2.15.05-win64.zip
 
   FLAC_SOL_FILE: FLAC.sln
   FLAC_CMAKE_X86: -DOGG_INCLUDE_DIR="%REPO_DIR%\lib\libogg\include" -DOGG_LIBRARY="%REPO_DIR%\lib\libogg\_build\Win32\Release\ogg.lib"
