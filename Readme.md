@@ -13,25 +13,25 @@
   | Project                                                           | Version               |
   | ----------------------------------------------------------------- | --------------------- |
   | [opus-tools][opus-tools-link], [(mirror)][opus-tools-mirror-link] | git master            |
-  | [opus][opus-link], [(mirror)][opus-mirror-link]                   | Latest stable release |
+  | [opus][opus-link], [(mirror)][opus-mirror-link]                   | git master |
   | [libopusenc][libopusenc-link], [(mirror)][libopusenc-mirror-link] | git master            |
   | [opusfile][opusfile-link], [(mirror)][opusfile-mirror-link]       | git master            |
   | [ogg][ogg-link], [(mirror)][ogg-mirror-link]                      | git master            |
   | [flac][flac-link], [(mirror)][flac-mirror-link]                   | git master            |
   | [openssl][openssl-link]                                           | Latest 1.0.x          |
 
-  [opus-tools-link]: https://git.xiph.org/?p=opus-tools.git
+  [opus-tools-link]: https://gitlab.xiph.org/xiph/opus-tools
   [opus-tools-mirror-link]: https://github.com/xiph/opus-tools
-  [opus-link]: https://git.xiph.org/?p=opus.git
+  [opus-link]: https://gitlab.xiph.org/xiph/opus
   [opus-mirror-link]: https://github.com/xiph/opus
-  [libopusenc-link]: https://git.xiph.org/?p=libopusenc.git
+  [libopusenc-link]: https://gitlab.xiph.org/xiph/libopusenc
   [libopusenc-mirror-link]: https://github.com/xiph/libopusenc
-  [opusfile-link]: https://git.xiph.org/?p=opusfile.git
+  [opusfile-link]: https://gitlab.xiph.org/xiph/opusfile
   [opusfile-mirror-link]: https://github.com/xiph/opusfile
-  [ogg-link]: https://git.xiph.org/?p=ogg.git
+  [ogg-link]: https://gitlab.xiph.org/xiph/ogg
   [ogg-mirror-link]: https://github.com/xiph/ogg
-  [flac-link]: https://git.xiph.org/?p=flac.git
-  [flac-mirror-link]: https://github.com/xiph/flac
+  [flac-link]: https://github.com/xiph/flac
+  [flac-mirror-link]: https://gitlab.xiph.org/xiph/flac
   [openssl-link]: https://www.openssl.org/
 
 
