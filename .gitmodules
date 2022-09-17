@@ -9,7 +9,7 @@
 	url = https://gitlab.xiph.org/xiph/ogg.git
 [submodule "lib/flac"]
 	path = lib/flac
-	url = https://gitlab.xiph.org/xiph/flac.git
+	url = https://github.com/xiph/flac.git
 [submodule "lib/libopusenc"]
 	path = lib/libopusenc
 	url = https://gitlab.xiph.org/xiph/libopusenc.git
