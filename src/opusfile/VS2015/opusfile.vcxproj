@@ -159,6 +159,7 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <AdditionalOptions>/Gw %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>..\..\..\openssl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -176,6 +177,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <AdditionalOptions>/Gw %(AdditionalOptions)</AdditionalOptions>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -194,6 +196,7 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <AdditionalOptions>/Gw %(AdditionalOptions)</AdditionalOptions>
       <AdditionalIncludeDirectories>..\..\..\openssl\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -211,6 +214,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <AdditionalOptions>/Gw %(AdditionalOptions)</AdditionalOptions>
+      <ControlFlowGuard>Guard</ControlFlowGuard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

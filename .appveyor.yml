@@ -40,7 +40,7 @@ environment:
   OGG_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:ogg
 
   OPUS_SOL_FILE: Opus.sln
-  OPUS_GIT_TAG: v1.3.1
+  #OPUS_GIT_TAG: v1.3.1
   OPUS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
   OPUS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
@@ -57,11 +57,11 @@ environment:
 
   NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/win64/nasm-2.15.05-win64.zip
 
-  FLAC_SOL_FILE: FLAC.sln
+  FLAC_SOL_FILE: src\libFLAC++\FLAC++.vcxproj
   FLAC_CMAKE_X86: -DOGG_INCLUDE_DIR="%REPO_DIR%\lib\libogg\include" -DOGG_LIBRARY="%REPO_DIR%\lib\libogg\_build\Win32\Release\ogg.lib"
   FLAC_CMAKE_X64: -DOGG_INCLUDE_DIR="%REPO_DIR%\lib\libogg\include" -DOGG_LIBRARY="%REPO_DIR%\lib\libogg\_build\x64\Release\ogg.lib"
-  FLAC_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32 /target:FLAC++
-  FLAC_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:FLAC++
+  FLAC_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
+  FLAC_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
   OPUS-TOOLS_SOL_FILE: opus-tools.sln
   OPUS-TOOLS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
@@ -95,7 +95,7 @@ before_build:
 
   # prepare opus
   - cd "%REPO_DIR%\lib\opus"
-  - git checkout tags/%OPUS_GIT_TAG%
+  #- git checkout tags/%OPUS_GIT_TAG%
   - mkdir "_build" && cd "_build"
   - mkdir "Win32" && cd "Win32"
   - cmake %CMAKE_GENERATOR_X86% %CMAKE_COMMON_DEFINES% ..\..\
@@ -138,7 +138,6 @@ before_build:
 
   # prepare flac
   - cd "%REPO_DIR%\lib\flac"
-  - ps: (Get-Content 'src\libFLAC\ia32\CMakeLists.txt') | ForEach-Object { $_ -replace '^#include_directories', 'include_directories' } | Set-Content 'src\libFLAC\ia32\CMakeLists.txt'
   - mkdir "_build" && cd "_build"
   - mkdir "Win32" && cd "Win32"
   - cmake %CMAKE_GENERATOR_X86% %CMAKE_COMMON_DEFINES% %FLAC_CMAKE_X86% ..\..\
