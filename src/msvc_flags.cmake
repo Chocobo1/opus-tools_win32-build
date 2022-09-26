@@ -18,9 +18,14 @@ function(cmake_initialize_per_config_variable _PREFIX _DOCSTRING)
     endforeach()
   endif()
 
-  set(_myflags " /fp:fast /Gw /guard:cf")
-  set(CMAKE_C_FLAGS_RELEASE_INIT ${CMAKE_C_FLAGS_RELEASE_INIT} ${_myflags})
-  set(CMAKE_CXX_FLAGS_RELEASE_INIT ${CMAKE_CXX_FLAGS_RELEASE_INIT} ${_myflags})
+  set(_mycflags "/fp:fast /GL /guard:cf /Gw")
+  set(CMAKE_C_FLAGS_RELEASE_INIT "${CMAKE_C_FLAGS_RELEASE_INIT} ${_mycflags}")
+  set(CMAKE_CXX_FLAGS_RELEASE_INIT "${CMAKE_CXX_FLAGS_RELEASE_INIT} ${_mycflags}")
+
+  set(_myldflags "/guard:cf /LTCG /OPT:ICF /OPT:REF")
+  set(CMAKE_EXE_LINKER_FLAGS_RELEASE_INIT "${CMAKE_EXE_LINKER_FLAGS_RELEASE_INIT} ${_myldflags}")
+  set(CMAKE_SHARED_LINKER_FLAGS_RELEASE_INIT "${CMAKE_SHARED_LINKER_FLAGS_RELEASE_INIT} ${_myldflags}")
+  set(CMAKE_MODULE_LINKER_FLAGS_RELEASE_INIT "${CMAKE_MODULE_LINKER_FLAGS_RELEASE_INIT} ${_myldflags}")
 
   _cmake_initialize_per_config_variable(${ARGV})
 endfunction()
