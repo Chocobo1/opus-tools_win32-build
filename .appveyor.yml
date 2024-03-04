@@ -40,7 +40,8 @@ environment:
   OGG_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:ogg
 
   OPUS_SOL_FILE: Opus.sln
-  #OPUS_GIT_TAG: v1.3.1
+  OPUS_GIT_TAG: v1.5.1
+  OPUS_CMAKE: -DOPUS_DEEP_PLC=ON -DOPUS_DRED=ON -DOPUS_OSCE=ON
   OPUS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
   OPUS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
@@ -95,14 +96,15 @@ before_build:
 
   # prepare opus
   - cd "%REPO_DIR%\lib\opus"
-  #- git checkout tags/%OPUS_GIT_TAG%
+  - git checkout tags/%OPUS_GIT_TAG%
+  - autogen.bat
   - mkdir "_build" && cd "_build"
   - mkdir "Win32" && cd "Win32"
-  - cmake %CMAKE_GENERATOR_X86% %CMAKE_COMMON_DEFINES% ..\..\
+  - cmake %CMAKE_GENERATOR_X86% %CMAKE_COMMON_DEFINES% %OPUS_CMAKE% ..\..\
   - msbuild %OPUS_SOL_FILE% %OPUS_MSBUILD_CMD_X86%
   - cd ..
   - mkdir "x64" && cd "x64"
-  - cmake %CMAKE_GENERATOR_X64% %CMAKE_COMMON_DEFINES% ..\..\
+  - cmake %CMAKE_GENERATOR_X64% %CMAKE_COMMON_DEFINES% %OPUS_CMAKE% ..\..\
   - msbuild %OPUS_SOL_FILE% %OPUS_MSBUILD_CMD_X64%
   - cd ..
 

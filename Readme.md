@@ -13,7 +13,7 @@
   | Project                                                           | Version               |
   | ----------------------------------------------------------------- | --------------------- |
   | [opus-tools][opus-tools-link], [(mirror)][opus-tools-mirror-link] | git master            |
-  | [opus][opus-link], [(mirror)][opus-mirror-link]                   | git master |
+  | [opus][opus-link], [(mirror)][opus-mirror-link]                   | v1.5.1                |
   | [libopusenc][libopusenc-link], [(mirror)][libopusenc-mirror-link] | git master            |
   | [opusfile][opusfile-link], [(mirror)][opusfile-mirror-link]       | git master            |
   | [ogg][ogg-link], [(mirror)][ogg-mirror-link]                      | git master            |
