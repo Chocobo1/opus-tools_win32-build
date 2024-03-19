@@ -41,7 +41,7 @@ environment:
 
   OPUS_SOL_FILE: Opus.sln
   OPUS_GIT_TAG: v1.5.1
-  OPUS_CMAKE: -DOPUS_DEEP_PLC=ON -DOPUS_DRED=ON -DOPUS_OSCE=ON
+  OPUS_CMAKE: -DOPUS_BUILD_PROGRAMS=ON -DOPUS_DEEP_PLC=ON -DOPUS_DRED=ON -DOPUS_OSCE=ON
   OPUS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
   OPUS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
@@ -168,7 +168,9 @@ after_build:
   - cd "%REPO_DIR%"
   - mkdir "opus-tools\win32" "opus-tools\x64"
   - copy "Readme.md" "opus-tools"
+  - copy "lib\opus\_build\Win32\Release\opus_*.exe" "opus-tools\win32"
   - copy "lib\opus-tools\win32\VS2015\Win32\Release\opus*.exe" "opus-tools\win32"
+  - copy "lib\opus\_build\x64\Release\opus_*.exe" "opus-tools\x64"
   - copy "lib\opus-tools\win32\VS2015\x64\Release\opus*.exe" "opus-tools\x64"
   - 7z a -sfx7z.sfx -mx9 "opus-tools.exe" "opus-tools"  # the artifact must reside at the source repo root
   - 'powershell -Command "& { $hash = (Get-FileHash -Algorithm SHA256 "opus-tools.exe").hash.ToString().toLower(); Write-Host $hash " *opus-tools.exe"; }" > "opus-tools.exe.sha256"'
