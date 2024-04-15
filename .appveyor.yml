@@ -40,8 +40,8 @@ environment:
   OGG_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64   /target:ogg
 
   OPUS_SOL_FILE: Opus.sln
-  OPUS_GIT_TAG: v1.5.1
-  OPUS_CMAKE: -DOPUS_BUILD_PROGRAMS=ON -DOPUS_DEEP_PLC=ON -DOPUS_DRED=ON -DOPUS_OSCE=ON
+  OPUS_GIT_TAG: v1.5.2
+  OPUS_CMAKE: -DOPUS_BUILD_PROGRAMS=ON -DOPUS_DEEP_PLC=ON -DOPUS_DRED=ON -DOPUS_OSCE=ON -DOPUS_STATIC_RUNTIME=ON
   OPUS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
   OPUS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
