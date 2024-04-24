@@ -1,0 +1,176 @@
+name: Build
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: ${{ github.head_ref != '' }}
+
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+
+    env:
+      CMAKE_GENERATOR_X86: "-G \"Visual Studio 17 2022\" -A Win32"
+      CMAKE_GENERATOR_X64: "-G \"Visual Studio 17 2022\" -A x64"
+      CMAKE_COMMON_DEFINES: "-DCMAKE_TOOLCHAIN_FILE=\"${{ github.workspace }}/src/msvc_flags.cmake\""
+
+      OGG_SOL_FILE: ogg.sln
+      OGG_MSBUILD_CMD_X86: "/maxcpucount /property:Configuration=Release,Platform=Win32 /target:ogg"
+      OGG_MSBUILD_CMD_X64: "/maxcpucount /property:Configuration=Release,Platform=x64   /target:ogg"
+
+      OPUS_SOL_FILE: Opus.sln
+      OPUS_GIT_TAG: v1.5.2
+      OPUS_CMAKE: "-DOPUS_BUILD_PROGRAMS=ON -DOPUS_DEEP_PLC=ON -DOPUS_DRED=ON -DOPUS_OSCE=ON -DOPUS_STATIC_RUNTIME=ON"
+      OPUS_MSBUILD_CMD_X86: "/maxcpucount /property:Configuration=Release,Platform=Win32"
+      OPUS_MSBUILD_CMD_X64: "/maxcpucount /property:Configuration=Release,Platform=x64"
+
+      LIBOPUSENC_SOL_FILE: opusenc.sln
+      LIBOPUSENC_MSBUILD_CMD_X86: "/maxcpucount /property:Configuration=Release,Platform=Win32"
+      LIBOPUSENC_MSBUILD_CMD_X64: "/maxcpucount /property:Configuration=Release,Platform=x64"
+
+      OPENSSL32_BIN_URL: "https://github.com/Chocobo1/openssl_win32-build/releases/download/2020.06.25_10/openssl-1.0.2u-32.exe"
+      OPENSSL64_BIN_URL: "https://github.com/Chocobo1/openssl_win32-build/releases/download/2020.06.25_10/openssl-1.0.2u-64.exe"
+
+      OPUSFILE_SOL_FILE: opusfile.sln
+      OPUSFILE_MSBUILD_CMD_X86: "/maxcpucount /property:Configuration=Release-NoHTTP,Platform=Win32 /target:opusfile"
+      OPUSFILE_MSBUILD_CMD_X64: "/maxcpucount /property:Configuration=Release-NoHTTP,Platform=x64   /target:opusfile"
+
+      NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/win64/nasm-2.16.03-win64.zip
+
+      FLAC_SOL_FILE: "src/libFLAC++/FLAC++.vcxproj"
+      FLAC_CMAKE_X86: "-DOGG_INCLUDE_DIR=\"${{ github.workspace }}/lib/libogg/include\" -DOGG_LIBRARY=\"${{ github.workspace }}/lib/libogg/_build/Win32/Release/ogg.lib\" -DINSTALL_MANPAGES=OFF"
+      FLAC_CMAKE_X64: "-DOGG_INCLUDE_DIR=\"${{ github.workspace }}/lib/libogg/include\" -DOGG_LIBRARY=\"${{ github.workspace }}/lib/libogg/_build/x64/Release/ogg.lib\" -DINSTALL_MANPAGES=OFF"
+      FLAC_MSBUILD_CMD_X86: "/maxcpucount /property:Configuration=Release,Platform=Win32"
+      FLAC_MSBUILD_CMD_X64: "/maxcpucount /property:Configuration=Release,Platform=x64"
+
+      OPUS-TOOLS_SOL_FILE: opus-tools.sln
+      OPUS-TOOLS_MSBUILD_CMD_X86: "/maxcpucount /property:Configuration=Release,Platform=Win32"
+      OPUS-TOOLS_MSBUILD_CMD_X64: "/maxcpucount /property:Configuration=Release,Platform=x64"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Checkout submodules
+        run: |
+          git submodule update --init --remote --recursive
+
+      - name: Setup devcmd
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Install NASM
+        run: |
+          curl -L -o "${{ runner.temp }}/nasm.zip" "${{ env.NASM_URL }}"
+          tar -xf "${{ runner.temp }}/nasm.zip" -C "${{ github.workspace }}/.."
+          move "${{ github.workspace }}/../nasm-*" "${{ github.workspace }}/../nasm"
+          Add-Content $env:GITHUB_PATH "${{ github.workspace }}/../nasm"
+
+      - name: Check tools
+        run: |
+          7z
+          cmake --version
+          nasm --version
+          msbuild --version
+
+      - name: Prepare ogg
+        run: |
+          cd "lib\libogg"
+          mkdir "_build" && cd "_build"
+          mkdir "Win32" && cd "Win32"
+          cmake ${{ env.CMAKE_GENERATOR_X86 }} ${{ env.CMAKE_COMMON_DEFINES }} ..\..\
+          msbuild ${{ env.OGG_SOL_FILE }} ${{ env.OGG_MSBUILD_CMD_X86 }}
+          cd ..
+          mkdir "x64" && cd "x64"
+          cmake ${{ env.CMAKE_GENERATOR_X64 }} ${{ env.CMAKE_COMMON_DEFINES }} ..\..\
+          msbuild ${{ env.OGG_SOL_FILE }} ${{ env.OGG_MSBUILD_CMD_X64 }}
+
+      - name: Prepare opus
+        run: |
+          cd "lib\opus"
+          git checkout tags/${{ env.OPUS_GIT_TAG }}
+          & .\autogen.bat
+          mkdir "_build" && cd "_build"
+          mkdir "Win32" && cd "Win32"
+          cmake ${{ env.CMAKE_GENERATOR_X86 }} ${{ env.CMAKE_COMMON_DEFINES }} ${{ env.OPUS_CMAKE }} ..\..\
+          msbuild ${{ env.OPUS_SOL_FILE }} ${{ env.OPUS_MSBUILD_CMD_X86 }}
+          cd ..
+          mkdir "x64" && cd "x64"
+          cmake ${{ env.CMAKE_GENERATOR_X64 }} ${{ env.CMAKE_COMMON_DEFINES }} ${{ env.OPUS_CMAKE }} ..\..\
+          msbuild ${{ env.OPUS_SOL_FILE }} ${{ env.OPUS_MSBUILD_CMD_X64 }}
+
+      - name: Prepare libopusenc
+        run: |
+          if (Test-Path "lib\libopusenc\win32\VS2015")
+          {
+            Remove-Item "lib\libopusenc\win32\VS2015" -Recurse
+          }
+          Move-Item -Force -Path "src\libopusenc\VS2015" -Destination "lib\libopusenc\win32"
+          msbuild "lib\libopusenc\win32\VS2015\${{ env.LIBOPUSENC_SOL_FILE }}" ${{ env.LIBOPUSENC_MSBUILD_CMD_X86 }}
+          msbuild "lib\libopusenc\win32\VS2015\${{ env.LIBOPUSENC_SOL_FILE }}" ${{ env.LIBOPUSENC_MSBUILD_CMD_X64 }}
+
+      - name: Prepare openssl
+        run: |
+          cd "lib"
+          mkdir "openssl" && cd "openssl"
+          curl -L -Z `
+            -o "openssl32.exe" "${{ env.OPENSSL32_BIN_URL }}" `
+            -o "openssl64.exe" "${{ env.OPENSSL64_BIN_URL }}"
+          7z x "openssl32.exe" -oWin32 > nul
+          7z x "openssl64.exe" -ox64 > nul
+
+      - name: Prepare opusfile
+        run: |
+          if (Test-Path "lib\opusfile\win32\VS2015")
+          {
+            Remove-Item "lib\opusfile\win32\VS2015" -Recurse
+          }
+          Move-Item -Force -Path "src\opusfile\VS2015" -Destination "lib\opusfile\win32"
+          msbuild "lib\opusfile\win32\VS2015\${{ env.OPUSFILE_SOL_FILE }}" ${{ env.OPUSFILE_MSBUILD_CMD_X86 }}
+          msbuild "lib\opusfile\win32\VS2015\${{ env.OPUSFILE_SOL_FILE }}" ${{ env.OPUSFILE_MSBUILD_CMD_X64 }}
+
+      - name: Prepare flac
+        run: |
+          cd "lib\flac"
+          mkdir "_build" && cd "_build"
+          mkdir "Win32" && cd "Win32"
+          cmake ${{ env.CMAKE_GENERATOR_X86 }} ${{ env.CMAKE_COMMON_DEFINES }} ${{ env.FLAC_CMAKE_X86 }} ..\..\
+          msbuild ${{ env.FLAC_SOL_FILE }} ${{ env.FLAC_MSBUILD_CMD_X86 }}
+          cd ..
+          mkdir "x64" && cd "x64"
+          cmake ${{ env.CMAKE_GENERATOR_X64 }} ${{ env.CMAKE_COMMON_DEFINES }} ${{ env.FLAC_CMAKE_X64 }} ..\..\
+          msbuild ${{ env.FLAC_SOL_FILE }} ${{ env.FLAC_MSBUILD_CMD_X64 }}
+
+      - name: Build opus-tools
+        run: |
+          if (Test-Path "lib\opus-tools\win32\VS2015")
+          {
+            Remove-Item "lib\opus-tools\win32\VS2015" -Recurse
+          }
+          Move-Item -Force -Path "src\opus-tools\VS2015" -Destination "lib\opus-tools\win32\VS2015"
+          (Get-Content 'lib\opus-tools\win32\config.h') | ForEach-Object { $_ -replace 'libFLAC_static.lib', 'FLAC++.lib' } | Set-Content 'lib\opus-tools\win32\config.h'
+          msbuild "lib\opus-tools\win32\VS2015\${{ env.OPUS-TOOLS_SOL_FILE }}" ${{ env.OPUS-TOOLS_MSBUILD_CMD_X86 }}
+          #mkdir "lib\opus-tools\win32\VS2015\x64\Release"
+          #copy  "src\opus-tools\opusenc.pgd" "lib\opus-tools\win32\VS2015\x64\Release\"
+          msbuild "lib\opus-tools\win32\VS2015\${{ env.OPUS-TOOLS_SOL_FILE }}" ${{ env.OPUS-TOOLS_MSBUILD_CMD_X64 }}
+
+      - name: Prepare upload
+        run: |
+          mkdir "opus-tools\win32"
+          mkdir "opus-tools\x64"
+          copy "Readme.md" "opus-tools"
+          copy "lib\opus\_build\Win32\Release\opus_*.exe" "opus-tools\win32"
+          copy "lib\opus-tools\win32\VS2015\Win32\Release\opus*.exe" "opus-tools\win32"
+          copy "lib\opus\_build\x64\Release\opus_*.exe" "opus-tools\x64"
+          copy "lib\opus-tools\win32\VS2015\x64\Release\opus*.exe" "opus-tools\x64"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: opus-tools
+          path: opus-tools
+          compression-level: 9
