@@ -160,8 +160,7 @@ jobs:
 
       - name: Prepare upload
         run: |
-          mkdir "opus-tools\win32"
-          mkdir "opus-tools\x64"
+          mkdir "opus-tools\win32", "opus-tools\x64"
           copy "Readme.md" "opus-tools"
           copy "lib\opus\_build\Win32\Release\opus_*.exe" "opus-tools\win32"
           copy "lib\opus-tools\win32\VS2015\Win32\Release\opus*.exe" "opus-tools\win32"
