@@ -3,7 +3,9 @@ name: Build
 on:
   workflow_dispatch:
 
-permissions: {}
+permissions:
+  attestations: write
+  id-token: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -173,3 +175,8 @@ jobs:
           name: opus-tools
           path: opus-tools
           compression-level: 9
+
+      - name: Generate build provenace attestations
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: opus-tools/**
