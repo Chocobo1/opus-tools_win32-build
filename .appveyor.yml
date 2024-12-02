@@ -56,7 +56,7 @@ environment:
   OPUSFILE_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release-NoHTTP,Platform=Win32 /target:opusfile
   OPUSFILE_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release-NoHTTP,Platform=x64   /target:opusfile
 
-  NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/2.16.01/win64/nasm-2.16.01-win64.zip
+  NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/win64/nasm-2.16.03-win64.zip
 
   FLAC_SOL_FILE: src\libFLAC++\FLAC++.vcxproj
   FLAC_CMAKE_X86: -DOGG_INCLUDE_DIR="%REPO_DIR%\lib\libogg\include" -DOGG_LIBRARY="%REPO_DIR%\lib\libogg\_build\Win32\Release\ogg.lib" -DINSTALL_MANPAGES=OFF
