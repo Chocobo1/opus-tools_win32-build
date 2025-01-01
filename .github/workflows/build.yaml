@@ -177,6 +177,6 @@ jobs:
           compression-level: 9
 
       - name: Generate build provenace attestations
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         with:
           subject-path: opus-tools/**
