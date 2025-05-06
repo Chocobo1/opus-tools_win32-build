@@ -1,18 +1,18 @@
-[submodule "opus-tools"]
-	path = lib/opus-tools
-	url = https://gitlab.xiph.org/xiph/opus-tools.git
-[submodule "opus"]
-	path = lib/opus
-	url = https://gitlab.xiph.org/xiph/opus.git
-[submodule "libogg"]
-	path = lib/libogg
-	url = https://gitlab.xiph.org/xiph/ogg.git
 [submodule "lib/flac"]
 	path = lib/flac
 	url = https://github.com/xiph/flac.git
+[submodule "lib/libogg"]
+	path = lib/libogg
+	url = https://gitlab.xiph.org/xiph/ogg.git
 [submodule "lib/libopusenc"]
 	path = lib/libopusenc
 	url = https://gitlab.xiph.org/xiph/libopusenc.git
+[submodule "lib/opus"]
+	path = lib/opus
+	url = https://gitlab.xiph.org/xiph/opus.git
 [submodule "lib/opusfile"]
 	path = lib/opusfile
 	url = https://gitlab.xiph.org/xiph/opusfile.git
+[submodule "lib/opus-tools"]
+	path = lib/opus-tools
+	url = https://gitlab.xiph.org/xiph/opus-tools.git
