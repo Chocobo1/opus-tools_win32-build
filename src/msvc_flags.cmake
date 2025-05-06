@@ -29,3 +29,5 @@ function(cmake_initialize_per_config_variable _PREFIX _DOCSTRING)
 
   _cmake_initialize_per_config_variable(${ARGV})
 endfunction()
+
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")

@@ -58,7 +58,7 @@ environment:
 
   NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/2.16.03/win64/nasm-2.16.03-win64.zip
 
-  FLAC_SOL_FILE: src\libFLAC++\FLAC++.vcxproj
+  FLAC_SOL_FILE: src\libFLAC\FLAC.vcxproj
   FLAC_CMAKE_X86: -DOGG_INCLUDE_DIR="%REPO_DIR%\lib\libogg\include" -DOGG_LIBRARY="%REPO_DIR%\lib\libogg\_build\Win32\Release\ogg.lib" -DINSTALL_MANPAGES=OFF
   FLAC_CMAKE_X64: -DOGG_INCLUDE_DIR="%REPO_DIR%\lib\libogg\include" -DOGG_LIBRARY="%REPO_DIR%\lib\libogg\_build\x64\Release\ogg.lib" -DINSTALL_MANPAGES=OFF
   FLAC_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
@@ -125,7 +125,7 @@ before_build:
 
   # prepare opusfile
   - cd "%REPO_DIR%"
-  - if exist "lib\opusfile\win32\VS2015" (rd /S /Q "lib\opusfile\win32\VS2015")
+  - mkdir "lib\opusfile\win32"
   - move /Y "src\opusfile\VS2015" "lib\opusfile\win32"
   - msbuild "lib\opusfile\win32\VS2015\%OPUSFILE_SOL_FILE%" %OPUSFILE_MSBUILD_CMD_X86%
   - msbuild "lib\opusfile\win32\VS2015\%OPUSFILE_SOL_FILE%" %OPUSFILE_MSBUILD_CMD_X64%
@@ -155,7 +155,7 @@ build_script:
   - cd "%REPO_DIR%"
   - if exist "lib\opus-tools\win32\VS2015" (rd /S /Q "lib\opus-tools\win32\VS2015")
   - move /Y "src\opus-tools\VS2015" "lib\opus-tools\win32\VS2015"
-  - ps: (Get-Content 'lib\opus-tools\win32\config.h') | ForEach-Object { $_ -replace 'libFLAC_static.lib', 'FLAC++.lib' } | Set-Content 'lib\opus-tools\win32\config.h'
+  - ps: (Get-Content 'lib\opus-tools\win32\config.h') | ForEach-Object { $_ -replace 'libFLAC_static.lib', 'FLAC.lib' } | Set-Content 'lib\opus-tools\win32\config.h'
   - msbuild "lib\opus-tools\win32\VS2015\%OPUS-TOOLS_SOL_FILE%" %OPUS-TOOLS_MSBUILD_CMD_X86%
 
   #- mkdir "lib\opus-tools\win32\VS2015\x64\Release"

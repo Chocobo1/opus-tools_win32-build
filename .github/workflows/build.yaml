@@ -127,10 +127,7 @@ jobs:
 
       - name: Prepare opusfile
         run: |
-          if (Test-Path "lib\opusfile\win32\VS2015")
-          {
-            Remove-Item "lib\opusfile\win32\VS2015" -Recurse
-          }
+          mkdir "lib\opusfile\win32"
           Move-Item -Force -Path "src\opusfile\VS2015" -Destination "lib\opusfile\win32"
           msbuild "lib\opusfile\win32\VS2015\${{ env.OPUSFILE_SOL_FILE }}" ${{ env.OPUSFILE_MSBUILD_CMD_X86 }}
           msbuild "lib\opusfile\win32\VS2015\${{ env.OPUSFILE_SOL_FILE }}" ${{ env.OPUSFILE_MSBUILD_CMD_X64 }}
