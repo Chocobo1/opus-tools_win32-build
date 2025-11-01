@@ -167,7 +167,7 @@ jobs:
           copy "lib\opus-tools\win32\VS2015\x64\Release\opus*.exe" "opus-tools\x64"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: opus-tools
           path: opus-tools
