@@ -167,13 +167,13 @@ jobs:
           copy "lib\opus-tools\win32\VS2015\x64\Release\opus*.exe" "opus-tools\x64"
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: opus-tools
           path: opus-tools
           compression-level: 9
 
       - name: Generate build provenace attestations
-        uses: actions/attest-build-provenance@v3
+        uses: actions/attest-build-provenance@v4
         with:
           subject-path: opus-tools/**
