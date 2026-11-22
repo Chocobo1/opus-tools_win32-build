@@ -41,7 +41,7 @@ environment:
 
   OPUS_SOL_FILE: Opus.sln
   OPUS_GIT_TAG: v1.6.1
-  OPUS_CMAKE: -DOPUS_BUILD_PROGRAMS=ON -DOPUS_DEEP_PLC=ON -DOPUS_DRED=ON -DOPUS_OSCE=ON -DOPUS_STATIC_RUNTIME=ON
+  OPUS_CMAKE: -DOPUS_BUILD_PROGRAMS=ON -DOPUS_DEEP_PLC=ON -DOPUS_DRED=ON -DOPUS_OSCE=ON -DOPUS_STATIC_RUNTIME=ON -DCMAKE_C_FLAGS_INIT="/DENABLE_QEXT=1"
   OPUS_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
   OPUS_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 
@@ -56,11 +56,11 @@ environment:
   OPUSFILE_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release-NoHTTP,Platform=Win32 /target:opusfile
   OPUSFILE_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release-NoHTTP,Platform=x64   /target:opusfile
 
-  NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/3.01/win64/nasm-3.01-win64.zip
+  NASM_URL: https://www.nasm.us/pub/nasm/releasebuilds/3.02/win64/nasm-3.02-win64.zip
 
   FLAC_SOL_FILE: src\libFLAC\FLAC.vcxproj
   FLAC_CMAKE_X86: -DOGG_INCLUDE_DIR="%REPO_DIR%\lib\libogg\include" -DOGG_LIBRARY="%REPO_DIR%\lib\libogg\_build\Win32\Release\ogg.lib" -DINSTALL_MANPAGES=OFF
-  FLAC_CMAKE_X64: -DOGG_INCLUDE_DIR="%REPO_DIR%\lib\libogg\include" -DOGG_LIBRARY="%REPO_DIR%\lib\libogg\_build\x64\Release\ogg.lib" -DINSTALL_MANPAGES=OFF
+  FLAC_CMAKE_X64: -DOGG_INCLUDE_DIR="%REPO_DIR%\lib\libogg\include" -DOGG_LIBRARY="%REPO_DIR%\lib\libogg\_build\x64\Release\ogg.lib"   -DINSTALL_MANPAGES=OFF
   FLAC_MSBUILD_CMD_X86: /maxcpucount /property:Configuration=Release,Platform=Win32
   FLAC_MSBUILD_CMD_X64: /maxcpucount /property:Configuration=Release,Platform=x64
 

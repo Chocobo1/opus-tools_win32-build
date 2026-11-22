@@ -49,6 +49,7 @@
     <ClCompile Include="..\..\src\opusenc.c" />
     <ClCompile Include="..\..\src\opus_header.c" />
     <ClCompile Include="..\..\src\picture.c" />
+    <ClCompile Include="..\..\src\random.c" />
     <ClCompile Include="..\..\src\resample.c" />
     <ClCompile Include="..\..\src\unicode_support.c" />
   </ItemGroup>
